@@ -3,6 +3,11 @@ FROM stackbrew/ubuntu:13.10
 MAINTAINER OpenProject Foundation (opf), info@openproject.org
 ENV DEBIAN_FRONTEND noninteractive
 
+# expose rails server port
+EXPOSE 8080
+# export ssh port; user is openproject; password will be generated and is dumped to stdout during the build
+EXPOSE 22
+
 #
 # Install ruby and its dependencies
 #
@@ -42,3 +47,20 @@ RUN /bin/echo -e "LANG=\"en_US.UTF-8\"" > /etc/default/local
 RUN apt-get install -y --force-yes -q mysql-client mysql-server
 
 RUN apt-get clean
+
+#
+# Setup OpenProject
+#
+ADD ./setup_system.sh /setup_system.sh
+RUN /bin/bash /setup_system.sh
+ENV CONFIGURE_OPTS --disable-install-doc
+RUN rm /setup_system.sh
+ENV PATH /home/openproject/.rbenv/bin:$PATH
+ADD ./passenger-standalone.json /home/openproject/openproject/passenger-standalone.json
+ADD ./start_openproject.sh /home/openproject/start_openproject.sh
+
+#
+# And, finally, launch supervisord in foreground mode.
+#
+ADD ./supervisord.conf /etc/supervisord.conf
+ENTRYPOINT ["supervisord", "-n"]

@@ -10,18 +10,21 @@ echo ssh openproject password: $SSH_USERPASS
 echo $SSH_USERPASS > /openproject-root-pw.txt
 
 # Install rbenv and ruby-build
-git clone https://github.com/sstephenson/rbenv.git /home/openproject/.rbenv
-git clone https://github.com/sstephenson/ruby-build.git /home/openproject/.rbenv/plugins/ruby-build
-/home/openproject/.rbenv/plugins/ruby-build/install.sh
-export PATH=/home/openproject/.rbenv/bin:$PATH
+git clone --depth 1 https://github.com/sstephenson/rbenv.git /home/openproject/.rbenv
+git clone --depth 1 https://github.com/sstephenson/ruby-build.git /home/openproject/.rbenv/plugins/ruby-build
+
+echo 'export RBENV_ROOT=/home/openproject/.rbenv' >> /etc/profile.d/rbenv.sh # or /etc/profile
 echo 'export PATH=/home/openproject/.rbenv/bin:$PATH' >> /etc/profile.d/rbenv.sh # or /etc/profile
 echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh # or /etc/profile
+
+echo 'export RBENV_ROOT=/home/openproject/.rbenv' >> /home/openproject/.bashrc
 echo 'export PATH=/home/openproject/.rbenv/bin:$PATH' >> /home/openproject/.bashrc
 echo 'eval "$(rbenv init -)"' >> /home/openproject/.bashrc
-source /etc/profile.d/rbenv.sh
+
+/home/openproject/.rbenv/plugins/ruby-build/install.sh
+. /etc/profile.d/rbenv.sh
 rbenv install 2.1.0
 rbenv global 2.1.0
-su -c "rbenv global 2.1.0" openproject
 
 #mysql has to be started this way as it doesn't work to call from /etc/init.d
 /usr/bin/mysqld_safe &
@@ -98,9 +101,13 @@ __EOF__
 
 
 gem install bundler
+# because of 'very good reasons'(tm) we need to source rbenv.sh again, so that it finds the bundle command
+. /etc/profile.d/rbenv.sh
+
 bundle install
 bundle exec rake db:create
 bundle exec rake db:migrate
+RAILS_ENV=production bundle exec rake db:seed
 bundle exec rake generate_secret_token
 bundle exec rake assets:precompile
 bundle exec passenger start --runtime-check-only
