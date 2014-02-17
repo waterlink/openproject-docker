@@ -5,7 +5,10 @@ Actually it installs `sshd`, `memcached`, `mysql server`, `rbenv`, `ruby 2.1`, `
 
 Please keep in mind, that we do **not** recommend to use the produced Docker image in production.
 Why?
-Because the docker team says that docker ["should not be used in production"](https://www.docker.io/learn_more/)
+Because the docker team says that docker ["should not be used in production"](https://www.docker.io/learn_more/),
+your data is not persisted (we'll talk about that later), there are no backups, nor monitoring etc.
+
+However, we strive to make our docker image secure and stable, so that we/you can use it in production in the future.
 
 ## Installation
 
