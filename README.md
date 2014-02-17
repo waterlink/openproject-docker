@@ -74,3 +74,32 @@ Well, we need a password now. The openproject account is secured with a random p
 We set that password during the image setup - watch for a line like `ssh openproject password: <random password>`
 during the `docker build -t="openproject_evaluation" .` step.
 
+## Further thoughts
+
+### Persist your data
+
+`todo`
+
+### Use external database
+
+`todo`
+
+### E-Mail Setup
+
+`todo`
+
+### Update your image
+
+`todo`
+
+## Contribute
+
+We are happy for any contribution :) You may either
+
+* make a Pull Request (which we favor ;))
+* [open a new issue](https://www.openproject.org/projects/docker/work_packages/new) at our bug tracker
+* or discuss [at the forums](https://www.openproject.org/projects/openproject/boards)
+
+## License
+
+This work is licensed under the GPLv3 - see [COPYRIGHT.md](COPYRIGHT.md) for details.
