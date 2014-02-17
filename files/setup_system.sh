@@ -107,8 +107,8 @@ gem install bundler
 bundle install
 bundle exec rake db:create
 bundle exec rake db:migrate
-RAILS_ENV=production bundle exec rake db:seed
 bundle exec rake generate_secret_token
+RAILS_ENV=production bundle exec rake db:seed
 bundle exec rake assets:precompile
 bundle exec passenger start --runtime-check-only
 
