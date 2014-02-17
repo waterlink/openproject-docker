@@ -7,9 +7,25 @@ useradd --create-home -g openproject -g sudo openproject
 chown openproject /home/openproject
 echo openproject:$SSH_USERPASS | chpasswd
 echo ssh openproject password: $SSH_USERPASS
+echo $SSH_USERPASS > /openproject-root-pw.txt
+
+# Install rbenv and ruby-build
+git clone https://github.com/sstephenson/rbenv.git /home/openproject/.rbenv
+git clone https://github.com/sstephenson/ruby-build.git /home/openproject/.rbenv/plugins/ruby-build
+/home/openproject/.rbenv/plugins/ruby-build/install.sh
+export PATH=/home/openproject/.rbenv/bin:$PATH
+echo 'export PATH=/home/openproject/.rbenv/bin:$PATH' >> /etc/profile.d/rbenv.sh # or /etc/profile
+echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh # or /etc/profile
+echo 'export PATH=/home/openproject/.rbenv/bin:$PATH' >> /home/openproject/.bashrc
+echo 'eval "$(rbenv init -)"' >> /home/openproject/.bashrc
+source /etc/profile.d/rbenv.sh
+rbenv install 2.1.0
+rbenv global 2.1.0
+su -c "rbenv global 2.1.0" openproject
+
 #mysql has to be started this way as it doesn't work to call from /etc/init.d
 /usr/bin/mysqld_safe &
-sleep 10s
+sleep 7s
 
 MYSQL_PASSWORD=`pwgen -c -n -1 15`
 #This is so the passwords show up in logs.
@@ -23,6 +39,7 @@ mysqladmin -u root password $MYSQL_PASSWORD
 cd /home/openproject
 git clone --depth 1 https://github.com/opf/openproject.git
 cd openproject
+rbenv local 2.1.0
 cat <<__EOF__ > /home/openproject/openproject/Gemfile.plugins
 # take the latest and greatest openproject gems from their unstable git branches
 # this way we are up-to-date but might experience some bugs
@@ -86,9 +103,9 @@ bundle exec rake db:create
 bundle exec rake db:migrate
 bundle exec rake generate_secret_token
 bundle exec rake assets:precompile
-passenger start --runtime-check-only
+bundle exec passenger start --runtime-check-only
 
 killall mysqld
-sleep 10s
+sleep 7s
 
 chown -R openproject /home/openproject

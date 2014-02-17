@@ -9,13 +9,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # RUN echo "deb http://archive.ubuntu.com/ubuntu saucy main universe" > /etc/apt/sources.list
 RUN apt-get update -q
 RUN locale-gen en_US en_US.UTF-8
-RUN apt-get install -q -y --force-yes ruby2.0 ruby2.0-dev build-essential libssl-dev zlib1g-dev ruby-switch
-RUN ruby-switch --set ruby2.0
+RUN apt-get install -y --force-yes build-essential curl git
+RUN apt-get install -y --force-yes zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev
 
 #
 # Install openproject dependencies
 #
-RUN apt-get install -q -y --force-yes libxslt1-dev libxml2-dev libmysqlclient-dev libpq-dev libsqlite3-dev libyaml-0-2 libmagickwand-dev libmagickcore-dev libmagickcore5-extra libgraphviz-dev libgvc5
+RUN apt-get install -q -y --force-yes libxslt1-dev libxml2-dev libmysqlclient-dev libpq-dev libsqlite3-dev libyaml-0-2 libmagickwand-dev libmagickcore-dev libmagickcore5-extra libgraphviz-dev libgvc5 ruby-dev
 
 # Install utilities
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
@@ -25,7 +25,7 @@ RUN echo 'deb https://oss-binaries.phusionpassenger.com/apt/passenger saucy main
 RUN chown root: /etc/apt/sources.list.d/passenger.list
 RUN chmod 600 /etc/apt/sources.list.d/passenger.list
 RUN apt-get update -q
-RUN apt-get install -q -y --force-yes memcached git subversion curl vim wget python-setuptools openssh-server sudo pwgen libcurl4-openssl-dev passenger
+RUN apt-get install -q -y --force-yes memcached git subversion vim wget python-setuptools openssh-server sudo pwgen libcurl4-openssl-dev passenger
 RUN easy_install supervisor
 RUN mkdir /var/log/supervisor/
 
@@ -34,11 +34,11 @@ RUN mkdir /var/run/sshd
 RUN /usr/sbin/sshd
 RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd
 RUN /bin/echo -e "LANG=\"en_US.UTF-8\"" > /etc/default/local
-# Setup supervisor to start openssh
-
 
 #
 # Install MySQL
 #
 # RUN apt-get -y --force-yes -q install postgresql postgresql-client postgresql-contrib
 RUN apt-get install -y --force-yes -q mysql-client mysql-server
+
+RUN apt-get clean

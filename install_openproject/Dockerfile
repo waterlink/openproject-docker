@@ -14,7 +14,9 @@ ENV DEBIAN_FRONTEND noninteractive
 #
 ADD ./setup_system.sh /setup_system.sh
 RUN /bin/bash /setup_system.sh
+ENV CONFIGURE_OPTS --disable-install-doc
 RUN rm /setup_system.sh
+ENV PATH /home/openproject/.rbenv/bin:$PATH
 ADD ./passenger-standalone.json /home/openproject/openproject/passenger-standalone.json
 
 #
