@@ -7,7 +7,7 @@ useradd --create-home -g openproject -g sudo openproject
 chown openproject /home/openproject
 echo openproject:$SSH_USERPASS | chpasswd
 echo ssh openproject password: $SSH_USERPASS
-echo $SSH_USERPASS > /openproject-root-pw.txt
+echo $SSH_USERPASS > /root/openproject-root-pw.txt
 
 # Install rbenv and ruby-build
 git clone --depth 1 https://github.com/sstephenson/rbenv.git /home/openproject/.rbenv
@@ -43,34 +43,8 @@ cd /home/openproject
 git clone --depth 1 https://github.com/opf/openproject.git
 cd openproject
 rbenv local 2.1.0
-cat <<__EOF__ > /home/openproject/openproject/Gemfile.plugins
-# take the latest and greatest openproject gems from their unstable git branches
-# this way we are up-to-date but might experience some bugs
-
-gem 'openproject-plugins',    :git => 'https://github.com/opf/openproject-plugins.git',         :branch => 'dev'
-gem 'openproject-backlogs',   :git => 'https://github.com/finnlabs/openproject-backlogs.git',   :branch => 'dev'
-gem 'openproject-pdf_export', :git => 'https://github.com/finnlabs/openproject-pdf_export.git', :branch => 'dev'
-gem 'openproject-meeting',    :git => 'https://github.com/finnlabs/openproject-meeting.git',    :branch => 'dev'
-gem 'openproject-costs',      :git => 'https://github.com/finnlabs/openproject-costs.git',      :branch => 'dev'
-
-__EOF__
-
-cat <<__EOF__ > /home/openproject/openproject/Gemfile.local
-# run server with unicorn
-
-gem 'passenger'
-
-__EOF__
-
-cat <<__EOF__ > /home/openproject/openproject/passenger-standalone.json
-{
-  "port": 8000,
-  "environment": "production",
-  "min_instances": 1,
-  "max_pool_size": 3
-}
-
-__EOF__
+mv /Gemfile.plugins /home/openproject/openproject/Gemfile.plugins
+mv /Gemfile.local /home/openproject/openproject/Gemfile.local
 
 cat <<__EOF__ > /home/openproject/openproject/config/database.yml
 production:

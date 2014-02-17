@@ -38,13 +38,7 @@ EXPOSE 22
 # RUN echo "deb http://archive.ubuntu.com/ubuntu saucy main universe" > /etc/apt/sources.list
 RUN apt-get update -q
 RUN locale-gen en_US en_US.UTF-8
-RUN apt-get install -y --force-yes build-essential curl git
-RUN apt-get install -y --force-yes zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev
-
-#
-# Install openproject dependencies
-#
-RUN apt-get install -q -y --force-yes libxslt1-dev libxml2-dev libmysqlclient-dev libpq-dev libsqlite3-dev libyaml-0-2 libmagickwand-dev libmagickcore-dev libmagickcore5-extra libgraphviz-dev libgvc5 ruby-dev
+RUN apt-get install -y --force-yes build-essential curl git zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev libxslt1-dev libmysqlclient-dev libpq-dev libsqlite3-dev libyaml-0-2 libmagickwand-dev libmagickcore-dev libmagickcore5-extra libgraphviz-dev libgvc5 ruby-dev
 
 # Install utilities
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
@@ -54,7 +48,7 @@ RUN echo 'deb https://oss-binaries.phusionpassenger.com/apt/passenger saucy main
 RUN chown root: /etc/apt/sources.list.d/passenger.list
 RUN chmod 600 /etc/apt/sources.list.d/passenger.list
 RUN apt-get update -q
-RUN apt-get install -q -y --force-yes memcached git subversion vim wget python-setuptools openssh-server sudo pwgen libcurl4-openssl-dev passenger
+RUN apt-get install -q -y --force-yes memcached subversion vim wget python-setuptools openssh-server sudo pwgen libcurl4-openssl-dev passenger
 RUN easy_install supervisor
 RUN mkdir /var/log/supervisor/
 
@@ -75,9 +69,11 @@ RUN apt-get clean
 #
 # Setup OpenProject
 #
-ADD ./files/setup_system.sh /setup_system.sh
 RUN /bin/bash /setup_system.sh
 ENV CONFIGURE_OPTS --disable-install-doc
+ADD ./files/setup_system.sh /setup_system.sh
+ADD ./files/Gemfile.local /Gemfile.local
+ADD ./files/Gemfile.plugins /Gemfile.plugins
 RUN rm /setup_system.sh
 ENV PATH /home/openproject/.rbenv/bin:$PATH
 ADD ./files/passenger-standalone.json /home/openproject/openproject/passenger-standalone.json
