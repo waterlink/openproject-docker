@@ -6,7 +6,7 @@ Actually it installs `sshd`, `memcached`, `mysql server`, `rbenv`, `ruby 2.1`, `
 Please keep in mind, that we do **not** recommend to use the produced Docker image in production.
 Why?
 Because the docker team says that docker ["should not be used in production"](https://www.docker.io/learn_more/),
-your data is not persisted (we'll talk about that later), there are no backups, nor monitoring etc.
+your data is not persisted (we'll talk about that later), there are no backups, no monitoring etc.
 
 However, we strive to make our docker image secure and stable, so that we/you can use it in production in the future.
 
@@ -78,7 +78,24 @@ during the `docker build -t="openproject_evaluation" .` step.
 
 ### Persist your data
 
-`todo`
+Everything OpenProject needs lies within its docker image. That includes the database and uploaded files (and log data, and maybe some repositories).
+The time may come when you want to use a new OpenProject docker image (e.g. when a new OpenProject version was released) and we need to take care
+of the data stored in your old image.
+
+We don't have a good solution built-in yet, but there is [a promising blog post](http://www.tech-d.net/2013/12/16/persistent-volumes-with-docker-container-as-volume-pattern/)
+from [Brian Goff](https://github.com/cpuguy83).
+
+Brian proposes to use two docker containers - One for the app and another one for the data.
+Now, the application container can mount directories from the data-container.
+You can easily backup your data container, or replace your app container.
+
+The places we need to take care of for OpenProject are:
+
+* `RAILS_ROOT/files` - all files which are uploaded are placed here
+* `/var/lib/mysql` - the place where MySQL stores its database
+* `RAILS_ROOT/log` - the OpenProject logfiles, in case you care
+* if you have configured OpenProject to use/create local repositories, the place where you store those repositories
+
 
 ### Use external database
 
@@ -88,9 +105,19 @@ during the `docker build -t="openproject_evaluation" .` step.
 
 `todo`
 
-### Update your image
+### Update the OpenProject code base
 
-`todo`
+To upgrade your OpenProject installation, ssh into your container and do a `git pull` within the OpenProject directory.
+A `bundle install`, `bundle exec rake db:migrate`, and `bundle exec rake assets:precompile` should finish the upgrade.
+
+Now restart your container and a new OpenProject should be running.
+
+As always: If you care about your data, do a backup before upgrading!
+
+### Also start worker jobs
+
+OpenProject uses worker jobs (e.g. for sending mail asynchronously). We still need to take care of them.
+
 
 ## Contribute
 
