@@ -96,15 +96,6 @@ The places we need to take care of for OpenProject are:
 * `RAILS_ROOT/log` - the OpenProject logfiles, in case you care
 * if you have configured OpenProject to use/create local repositories, the place where you store those repositories
 
-
-### Use external database
-
-`todo`
-
-### E-Mail Setup
-
-`todo`
-
 ### Update the OpenProject code base
 
 To upgrade your OpenProject installation, ssh into your container and do a `git pull` within the OpenProject directory.
@@ -117,6 +108,16 @@ As always: If you care about your data, do a backup before upgrading!
 ### Also start worker jobs
 
 OpenProject uses worker jobs (e.g. for sending mail asynchronously). We still need to take care of them.
+
+### Features which we'd love to have
+
+* Ability yo use an external database
+* working E-Mail Setup
+* also start worker jobs
+* an additional image (or instructions) for 'easy' development
+* nice seed data
+* make the admin change his password on the first login
+* ssh-login with a different user (so that we can remove the openproject user from the sudoers list)
 
 
 ## Contribute
