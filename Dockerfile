@@ -86,3 +86,4 @@ ADD ./files/start_openproject_worker.sh /home/openproject/start_openproject_work
 #
 ADD ./files/supervisord.conf /etc/supervisord.conf
 ENTRYPOINT ["supervisord", "-n"]
+RUN echo "INFO: openproject ssh password: `cat /root/openproject-root-pw.txt`"
