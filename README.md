@@ -1,5 +1,9 @@
 # OpenProject Docker
 
+```
+WARNING: The OpenProject docker setup is still under heavy development.
+```
+
 A Dockerfile that installs OpenProject.
 Actually it installs `sshd`, `memcached`, `mysql server`, `rbenv`, `ruby 2.1`, `passenger`,and a fresh `openproject` development snapshot.
 
