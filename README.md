@@ -111,37 +111,48 @@ As always: If you care about your data, do a backup before upgrading!
 
 ### E-Mail Setup
 
-The OpenProject image is configured to use `letter_opener` for mail handling. `letter_opener` does **not**
-send actual mails, but displays the mail that would be sent in another browser tab.
+As a default the OpenProject docker image does **not** send any mails to anyone.
+To change that you must specify an smtp account from which OpenProject can send mails through environment variables.
+You can do that when starting the OpenProject docker image like this:
 
-If you want to send actual emails, edit the `configuration.yml` (in `files/configuration.yml` before you build).
-
-Replace the lines
-
-```yml
-default:
-  email_delivery_method: :letter_opener
+```bash
+docker run -d \
+  -p 8080 -p 20
+  -e "EMAIL_DELIVERY_METHOD=smtp" \
+  -e "SMTP_ADDRESS=smtp.gmail.com" \
+  -e "SMTP_PORT=587" \
+  -e "SMTP_DOMAIN=smpt.gmail.com" \
+  -e "SMTP_AUTHENTICAITON=plain" \
+  -e "SMTP_ENABLE_STARTTLS_AUTO=true" \
+  -e "SMTP_USER_NAME=user" \
+  -e "SMTP_PASSWORD=password" \
+  openproject_evaluation
 ```
 
-with your actual Mail settings - for example:
-```yml
-default:
-  # Outgoing emails configuration
-  email_delivery_method: :smtp
-  smtp_address: smtp.example.net
-  smtp_port: 25
-  smtp_domain: example.net
-  smtp_authentication: :login
-  smtp_user_name: "openproject@example.net"
-  smtp_password: "my_openproject_password"
-```
+Of course you have to insert the your `user`, `password`, etc. values.
+The settings above (except maybe the username and password) should work for a standard gmail account.
 
-**Note:** Please take care of indentation - white space is important for `.yml` files!
+Please also visit the `Modules -> Administration -> Settings -> Email notifications` page for further settings.
 
 ### OpenProject plug-ins
 
 We have included some OpenProject plug-ins into the docker image. However, you can change the list of plug-ins (and install some themes, or even remove all the plug-ins).
 To do this, edit the `files/Gemfile.plugins` file before you build.
+
+## Use an external database
+
+Through defining the `DATABASE_URL` environment variable you may use an external database. Currently we support MySQL and PostgreSQL databases.
+
+The variable must be set when starting the OpenProject docker image:
+
+```bash
+docker run -d \
+  -p 8080 -p 20
+  -e "DATABASE_URL=mysql2://user:password@host/db" \
+  openproject_evaluation
+```
+
+Of course you have to insert the correct `user`, `password`, `host` and `db` (database name).
 
 ### Features which we'd love to have
 

@@ -45,7 +45,6 @@ cd openproject
 rbenv local 2.1.0
 mv /Gemfile.plugins /home/openproject/openproject/Gemfile.plugins
 mv /Gemfile.local /home/openproject/openproject/Gemfile.local
-mv /configuration.yml /home/openproject/openproject/configuration.yml
 
 cat <<__EOF__ > /home/openproject/openproject/config/database.yml
 production:
