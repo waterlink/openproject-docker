@@ -156,6 +156,9 @@ Of course you have to insert the correct `user`, `password`, `host` and `db` (da
 
 **Note:** for a PostgreSQL database, let your URI start with `postgres://` instead of `mysql2://`.
 
+**Note:** make sure, that your external database is set-up correctly!
+It must be accessible, the user must exist and have appropriate rights to the OpenProject database, and the schema must be up-to-date (run `bundle exec rake db:migrate` targeted at your remote database to update the schema).
+
 ### Features which we'd love to have
 
 * make the admin change his password on the first login
