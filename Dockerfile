@@ -70,15 +70,16 @@ RUN apt-get clean
 # Setup OpenProject
 #
 ENV CONFIGURE_OPTS --disable-install-doc
-ADD ./files/setup_system.sh /setup_system.sh
-RUN /bin/bash /setup_system.sh
 ADD ./files/Gemfile.local /Gemfile.local
 ADD ./files/Gemfile.plugins /Gemfile.plugins
+ADD ./files/configuration.yml /configuration.yml
+ADD ./files/setup_system.sh /setup_system.sh
+RUN /bin/bash /setup_system.sh
 RUN rm /setup_system.sh
 ENV PATH /home/openproject/.rbenv/bin:$PATH
 ADD ./files/passenger-standalone.json /home/openproject/openproject/passenger-standalone.json
 ADD ./files/start_openproject.sh /home/openproject/start_openproject.sh
-ADD ./files/configuration.yml /home/openproject/config/configuration.yml
+ADD ./files/start_openproject_worker.sh /home/openproject/start_openproject_worker.sh
 
 #
 # And, finally, launch supervisord in foreground mode.

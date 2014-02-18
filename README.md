@@ -12,7 +12,7 @@ However, we strive to make our docker image secure and stable, so that we/you ca
 
 ## Installation
 
-First [install docker](https://www.docker.io/). Then do the following to build an openproject image (this may take some time):
+First [install docker](https://www.docker.io/). Then do the following to build an OpenProject image (this may take some time):
 
 ```
 $ git clone https://github.com/opf/openproject-docker.git
@@ -24,7 +24,7 @@ $ docker build -t="openproject_evaluation" .
 
 ## Usage
 
-To spawn a new instance of openproject:
+To spawn a new instance of OpenProject:
 
 ```bash
 $ docker run -p 8080 -d openproject_evaluation
@@ -55,7 +55,7 @@ http://127.0.0.1:<port>
 
 ## Get a shell on your OpenProject image
 
-Concurrently with the OpenProject server, we start an ssh deamon which listenes on the default port 22.
+Concurrently with the OpenProject server, we start an ssh daemon which listens on the default port 22.
 To connect to your OpenProject image, you have to tell docker to connect that port.
 Start your image with the additional port:
 
@@ -105,15 +105,43 @@ Now restart your container and a new OpenProject should be running.
 
 As always: If you care about your data, do a backup before upgrading!
 
-### Also start worker jobs
+### E-Mail Setup
 
-OpenProject uses worker jobs (e.g. for sending mail asynchronously). We still need to take care of them.
+The OpenProject image is configured to use `letter_opener` for mail handling. `letter_opener` does **not**
+send actual mails, but displays the mail that would be sent in another browser tab.
+
+If you want to send actual emails, edit the `configuration.yml` (in `files/configuration.yml` before you build).
+
+Replace the lines
+
+```yml
+default:
+  email_delivery_method: :letter_opener
+```
+
+with your actual Mail settings - for example:
+```yml
+default:
+  # Outgoing emails configuration
+  email_delivery_method: :smtp
+  smtp_address: smtp.example.net
+  smtp_port: 25
+  smtp_domain: example.net
+  smtp_authentication: :login
+  smtp_user_name: "openproject@example.net"
+  smtp_password: "my_openproject_password"
+```
+
+**Note:** Please take care of indentation - white space is important for `.yml` files!
+
+### OpenProject plug-ins
+
+We have included some OpenProject plug-ins into the docker image. However, you can change the list of plug-ins (and install some themes, or even remove all the plug-ins).
+To do this, edit the `files/Gemfile.plugins` file before you build.
 
 ### Features which we'd love to have
 
 * Ability yo use an external database
-* working E-Mail Setup
-* also start worker jobs
 * an additional image (or instructions) for 'easy' development
 * nice seed data
 * make the admin change his password on the first login

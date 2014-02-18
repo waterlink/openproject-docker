@@ -45,6 +45,7 @@ cd openproject
 rbenv local 2.1.0
 mv /Gemfile.plugins /home/openproject/openproject/Gemfile.plugins
 mv /Gemfile.local /home/openproject/openproject/Gemfile.local
+mv /configuration.yml /home/openproject/openproject/configuration.yml
 
 cat <<__EOF__ > /home/openproject/openproject/config/database.yml
 production:
@@ -79,7 +80,7 @@ gem install bundler
 . /etc/profile.d/rbenv.sh
 
 bundle install
-bundle exec rake db:create
+bundle exec rake db:create:all
 bundle exec rake db:migrate
 bundle exec rake generate_secret_token
 RAILS_ENV=production bundle exec rake db:seed
