@@ -139,7 +139,7 @@ Please also visit the `Modules -> Administration -> Settings -> Email notificati
 We have included some OpenProject plug-ins into the docker image. However, you can change the list of plug-ins (and install some themes, or even remove all the plug-ins).
 To do this, edit the `files/Gemfile.plugins` file before you build.
 
-## Use an external database
+### Use an external database
 
 Through defining the `DATABASE_URL` environment variable you may use an external database. Currently we support MySQL and PostgreSQL databases.
 
@@ -154,12 +154,13 @@ docker run -d \
 
 Of course you have to insert the correct `user`, `password`, `host` and `db` (database name).
 
+**Note:** for a PostgreSQL database, let your URI start with `postgres://` instead of `mysql2://`.
+
 ### Features which we'd love to have
 
-* Ability yo use an external database
-* an additional image (or instructions) for 'easy' development
-* nice seed data
 * make the admin change his password on the first login
+* nice seed data
+* an additional image (or instructions) for 'easy' development
 * ssh-login with a different user (so that we can remove the openproject user from the sudoers list)
 
 
