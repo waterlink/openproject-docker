@@ -72,7 +72,6 @@ RUN apt-get clean
 ENV CONFIGURE_OPTS --disable-install-doc
 ADD ./files/Gemfile.local /Gemfile.local
 ADD ./files/Gemfile.plugins /Gemfile.plugins
-ADD ./files/configuration.yml /configuration.yml
 ADD ./files/setup_system.sh /setup_system.sh
 RUN /bin/bash /setup_system.sh
 RUN rm /setup_system.sh
