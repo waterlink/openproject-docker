@@ -18,7 +18,7 @@ However, we strive to make our docker image secure and stable, so that we/you ca
 
 First [install docker](https://www.docker.io/). Then do the following to build an OpenProject image (this may take some time):
 
-```
+```bash
 $ git clone https://github.com/opf/openproject-docker.git
 $ cd openproject-docker
 $ docker build -t="openproject_evaluation" .
@@ -165,7 +165,7 @@ It must be accessible, the user must exist and have appropriate rights to the Op
 * nice seed data
 * an additional image (or instructions) for 'easy' development
 * ssh-login with a different user (so that we can remove the openproject user from the sudoers list)
-
+* have a smallter image size
 
 ## Contribute
 
