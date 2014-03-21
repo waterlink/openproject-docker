@@ -1,0 +1,23 @@
+base: &base
+  adapter: <%= ENV['DB_ADAPTER'] || 'postgresql' %>
+  host: <%= ENV['PG_PORT_5432_TCP_ADDR'] || '127.0.0.1' %>
+  port: <%= ENV['PG_PORT_5432_TCP_PORT'] || 5432 %>
+  encoding: utf8
+  username: <%= ENV['DB_USER'] || 'openproject' %>
+  password: <%= ENV['DB_PASS'] || 'openproject' %>
+
+development:
+  <<: *base
+  database: <%= ENV['DB_NAME'] || 'openproject_development' %>
+
+test:
+  <<: *base
+  database: <%= ENV['DB_NAME'] || 'openproject_test' %>
+
+staging:
+  <<: *base
+  database: <%= ENV['DB_NAME'] || 'openproject_staging' %>
+
+production:
+  <<: *base
+  database: <%= ENV['DB_NAME'] || 'openproject_production' %>

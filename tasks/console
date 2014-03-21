@@ -1,0 +1,27 @@
+#!/bin/bash
+
+source lib/config.sh
+
+if [[ "$1" = "clean" ]]; then
+  docker rmi opf/app_image_$RAILS_ENV
+fi
+
+if [[ "$1" = "commit" ]] || [[ "$2" = "commit" ]]; then
+  docker commit OPF_APP_$RAILS_ENV opf/app_image_$RAILS_ENV
+fi
+
+# run
+function run_console {
+  if [[ $# -gt 0 ]] || [[ ! -z "$CMD" ]]; then
+    docker run -i -t -rm=true -link OPF_PG_$RAILS_ENV:pg -link OPF_MEMCACHED_$RAILS_ENV:memcached -v $data_folder/src:/home/openproject -e DB_USER=$pg_user -e DB_PASS=$pg_pass -e RUBY=$ruby_version -e RAILS_ENV=$rails_env -e RAILS_CACHE_STORE=$cache_store -e WORKERS=$workers -entrypoint=/bin/bash opf/app_image_$RAILS_ENV $* "$CMD"
+  else
+    docker run -i -t -rm=true -link OPF_PG_$RAILS_ENV:pg -link OPF_MEMCACHED_$RAILS_ENV:memcached -v $data_folder/src:/home/openproject -e DB_USER=$pg_user -e DB_PASS=$pg_pass -e RUBY=$ruby_version -e RAILS_ENV=$rails_env -e RAILS_CACHE_STORE=$cache_store -e WORKERS=$workers -entrypoint=/bin/bash opf/app_image_$RAILS_ENV
+  fi
+}
+
+if [[ "$1" = "bash" ]]; then
+  run_console
+else
+  CMD="source /usr/local/rvm/scripts/rvm && cd /home/openproject/openproject && bundle exec rails console" run_console -c
+fi
+

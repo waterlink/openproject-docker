@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for x in postgresql; do
+  docker build -t opf/$x builds/$x
+done
+

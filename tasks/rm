@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source lib/config.sh
+
+if [[ "$1" = "all" ]]; then
+  tasks/rm OPF_PG_$RAILS_ENV
+  tasks/rm OPF_MEMCACHED_$RAILS_ENV
+  tasks/rm OPF_APP_$RAILS_ENV
+else
+  docker kill $1
+  docker rm $1
+fi
+

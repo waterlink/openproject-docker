@@ -1,0 +1,3 @@
+[submodule "builds/postgresql"]
+	path = builds/postgresql
+	url = https://github.com/waterlink/docker-postgresql

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+[[ -d sensitive ]] && rm -r sensitive
+
+mkdir -p sensitive
+
+openssl rand -base64 48 | md5sum | awk '{print $1}' > sensitive/pg_pass
+ssh-keygen -q -t rsa -N "" -C "key for root access" -f sensitive/id_root
+ssh-keygen -q -t rsa -N "" -C "key for user access" -f sensitive/id_user
+
+mkdir -p ~/data/pg
+mkdir -p ~/data/src
+cp files/install.sh ~/data/src/
+
+

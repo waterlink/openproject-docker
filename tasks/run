@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source lib/config.sh
+
+# run
+docker run -d -name OPF_PG_$RAILS_ENV -p 5432 -v $data_folder/pg:/data -e USER=$pg_user -e PASS=$pg_pass opf/postgresql
+
+docker run -d -name OPF_MEMCACHED_$RAILS_ENV -p 11211 borja/docker-memcached
+
+docker run -d -name OPF_APP_$RAILS_ENV -p 0.0.0.0:$ex_port:8080 -link OPF_PG_$RAILS_ENV:pg -link OPF_MEMCACHED_$RAILS_ENV:memcached -v $data_folder/src:/home/openproject -e DB_USER=$pg_user -e DB_PASS=$pg_pass -e RUBY=$ruby_version -e RAILS_ENV=$rails_env -e RAILS_CACHE_STORE=$cache_store -e WORKERS=$workers -entrypoint=/bin/bash rcmorano/saucy-rvm:ruby-head "/home/openproject/install.sh"
+
