@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source lib/config.sh
+
+if [[ "$1" = "all" ]]; then
+  tasks/restart OPF_PG_$RAILS_ENV
+  tasks/restart OPF_MEMCACHED_$RAILS_ENV
+  tasks/restart OPF_APP_$RAILS_ENV
+else
+  docker restart $1
+fi
+
