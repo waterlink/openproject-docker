@@ -21,7 +21,11 @@ function run_console {
 
 if [[ "$1" = "bash" ]]; then
   run_console
+elif [[ "$1" = "test" ]]; then
+  CMD='RAILS_ENV=test RAILS_GROUPS=test source /etc/profile.d/rvm.sh && cd /home/openproject/openproject && ruby -I"lib:test" -I"/usr/local/rvm/rubies/ruby-2.1.0/lib/ruby/2.1.0" "/usr/local/rvm/rubies/ruby-2.1.0/lib/ruby/2.1.0/rake/rake_test_loader.rb" "test/unit/**/*_test.rb"' run_console -c
+elif [[ "$1" = "spec" ]]; then
+  CMD='RAILS_ENV=test RAILS_GROUPS=test source /etc/profile.d/rvm.sh && cd /home/openproject/openproject && rspec' run_console -c
 else
-  CMD="source /usr/local/rvm/scripts/rvm && cd /home/openproject/openproject && bundle exec rails console" run_console -c
+  CMD="source /etc/profile.d/rvm.sh && cd /home/openproject/openproject && bundle exec rails console" run_console -c
 fi
 
