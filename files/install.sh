@@ -22,7 +22,7 @@ template = ERB.new File.read "config/configuration.yml.erb"
 File.open("config/configuration.yml", "w") { |f| f.write template.result }
 ' > /home/openproject/configure.rb
 
-[[ -f config/configuration.yml.erb ]] || cp config/configuration.yml.example config/configuration.yml.erb
+[[ -f config/configuration.yml.erb ]] || cp config/configuration.yml.erb.example config/configuration.yml.erb
 bundle exec ruby /home/openproject/configure.rb
 
 if bundle exec rake db:create; then
